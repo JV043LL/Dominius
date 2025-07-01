@@ -1,0 +1,114 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  padding: 1rem;
+  background: #f5f5f5;
+}
+
+/* Contenedor principal: grid de 2 columnas + resumen */
+.container {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+  height: 90vh;
+}
+
+/* Editor de Quill (general para los 3) */
+.editor {
+  height: 150px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Estilos adicionales para el contenido de Quill */
+.ql-container {
+  height: 100% !important;
+  border: none !important;
+  font-size: 1rem;
+}
+
+.ql-toolbar {
+  border-radius: 4px 4px 0 0;
+}
+
+/* Encabezado */
+header {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 0.5rem;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Área de keywords (izquierda) */
+.keywords {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Área de notas detalladas (derecha) */
+.notas {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Área de resumen (parte baja) */
+.resumen {
+  grid-column: 1 / -1;
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-y: hidden;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Botón de guardar */
+button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    height: auto;
+  }
+  .resumen {
+    height: auto;
+  }
+}

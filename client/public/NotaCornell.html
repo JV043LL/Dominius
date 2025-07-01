@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notas Cornell</title>
+    <!--Estilo-->
+    <link rel="stylesheet" href="../css/NotaCornell.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="icon" type="image/x-icon" href="../ico/Note.ico" />
+    <!--Tiny-->
+    <script
+      src="/tinymce/tinymce.min.js"
+      referrerpolicy="origin"
+    ></script>
+    <!--Codigo JS-->
+    <script src="../js/NotaCornell.js"></script>
+  </head>
+
+  <body>
+
+    <div id="header"></div>
+
+    <main>
+      <div class="container">
+        <header>
+          <h1>Notas Cornell</h1>
+        </header>
+        <!--Seccion de palabras clave-->
+        <aside class="keywords">
+          <h2>Keywords</h2>
+          <textarea id="editor-keywords" class="editor"></textarea>
+        </aside>
+        <!--Seccion de notas-->
+        <section class="notas">
+          <h2>Notas</h2>
+          <textarea id="editor-notas" class="editor"></textarea>
+        </section>
+        <!--Seccion de resumen-->
+        <section class="resumen">
+          <h2>Resumen</h2>
+          <textarea id="editor-resumen" class="editor"></textarea>
+        </section>
+      </div>
+    </main>    
+    <div id="footer"></div>
+  </body>
+  <script src="../js/components.js" defer></script>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Subir Material del Profesor</title>
+    <!--Estilos-->
+    <link rel="stylesheet" href="../css/profesor.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="icon" type="image/x-icon" href="../ico/Note.ico" />
+    </head>
+    <body>
+        <div id="header"></div>
+        <main>
+            <div class="form-container">
+            <h2>Subir Material del Profesor</h2>
+
+            <form action="/subir-material" method="POST">
+                <label for="uea">UEA:</label>
+                <input type="text" id="uea" name="uea" required />
+
+                <label for="contenido">Contenido:</label>
+                <textarea id="contenido" name="contenido" rows="6" required></textarea>
+
+                <label for="tipo">Tipo:</label>
+                <select id="tipo" name="tipo" required>
+                <option value="palabrasClave">Palabras Clave</option>
+                <option value="notas">Notas</option>
+                <option value="resumen">Resumen</option>
+                </select>
+
+                <button type="submit" class="btn">Subir Material</button>
+            </form>
+        </main>
+        <div id="footer"></div>
+    </body>
+    <script src="../js/components.js" defer></script>
+</html>
