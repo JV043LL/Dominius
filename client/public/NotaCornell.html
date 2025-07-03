@@ -12,6 +12,7 @@
     <script src="/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
     <!--Codigo JS-->
     <script src="../js/NotaCornell.js"></script>
+    <script defer src="../js/login.js"></script>
     <script src="../js/components.js" defer></script>
   </head>
 
@@ -22,6 +23,7 @@
       <div class="container">
         <header>
           <h1>Notas Cornell</h1>
+          <h2 class="uea">UEA</h2>
         </header>
         <!--Seccion de palabras clave-->
         <aside class="keywords">
@@ -38,6 +40,10 @@
           <h2>Resumen</h2>
           <textarea id="editor-resumen" class="editor"></textarea>
         </section>
+      </div>
+      <div class="Botones">
+        <button onclick="Guardar">Guardar</button>
+        <button onclick="exportarPDF()">Exportar a PDF</button>
       </div>
     </main>
     <div id="footer"></div>
