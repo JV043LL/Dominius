@@ -18,7 +18,7 @@ fi
 
 # Instalar dependencias necesarias
 echo "📦 Instalando dependencias (express, tinymce, ejs)..."
-npm install express tinymce ejs >/dev/null 2>&1
+npm install express tinymce ejs express-session passport passport-google-oauth20 >/dev/null 2>&1
 
 # Modificar package.json con la información del proyecto
 echo "📝 Modificando package.json..."

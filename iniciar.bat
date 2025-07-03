@@ -9,7 +9,7 @@ if not exist package.json (
 )
 
 echo Instalando dependencias...
-call npm install express tinymce ejs >nul 2>&1
+call npm install express tinymce express-session passport passport-google-oauth20 ejs >nul 2>&1
 
 :: Modificar package.json con Node.js
 node -e "let f='package.json', d=require('./'+f); d.author='Jose Vicente Lopez Lopez'; d.keywords=['dominius','uam','cornell','notas','calendario','TF-IDF','Cornell']; d.description='Plataforma web para la toma estructurada de apuntes y análisis de dominio académico desarrollada como proyecto de integración de la Licenciatura en Ingeniería en Computación (UAM-Azc)'; require('fs').writeFileSync(f, JSON.stringify(d, null, 2))"

@@ -11,7 +11,7 @@ if [ ! -f package.json ]; then
 fi
 
 echo "📦 Instalando dependencias (express, tinymce, ejs)..."
-npm install express tinymce ejs
+npm install express tinymce ejs express-session passport passport-google-oauth20
 
 # Modificar package.json
 echo "📝 Modificando package.json..."

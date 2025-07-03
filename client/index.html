@@ -4,42 +4,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DOMINIUS - Inicio</title>
+    <!--Estilo-->
     <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+    <!--Codigo JS-->
+    <script src="../js/components.js" defer></script>
     <script defer src="js/login.js"></script>
   </head>
-  <body
-    style="
-      background-color: #f0f0f0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    "
-  >
-    <!-- Logo UAM -->
-    <img
-      src="/ico/uam_logo.png"
-      alt="Logo UAM"
-      style="margin-top: 30px; width: 400px; max-width: 90%"
-    />
+  <body>
+    <div id="header"></div>
 
-    <!-- Título -->
-    <h1 style="color: #2c3e50; margin-top: 20px">
-      Bienvenid@ a DOMINIUS: Tu Guía de Dominio Académico
-    </h1>
+    <main>
+      <!-- Título -->
+      <h1 style="color: #2c3e50; margin-top: 20px">
+        Bienvenid@ a DOMINIUS: Tu Guía de Dominio Académico
+      </h1>
+      <p id="user-info"></p>
+      <button onclick="logout()">Cerrar sesión</button>
 
-    <!-- Menú -->
-    <div
-      style="
-        margin-top: 30px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-      "
-    >
-      <a href="/NotasCornell" class="btn">Crear nueva nota</a>
-      <a href="/subir" class="btn">Subir material del curso</a>
-      <a href="/metricas" class="btn">Consultar métricas</a>
-      <a href="/calendario" class="btn">Ver calendario</a>
-    </div>
+      <!-- Menú -->
+      <div>
+        <a href="/NotasCornell" class="btn">Crear nueva nota</a>
+        <a href="/subir" class="btn">Subir material del curso</a>
+        <a href="/metricas" class="btn">Consultar métricas</a>
+        <a href="/calendario" class="btn">Ver calendario</a>
+      </div>
+    </main>
+
+    <div id="footer"></div>
   </body>
 </html>
