@@ -4,13 +4,7 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const path = require("path");
 const PDFDocument = require("pdfkit");
-const {
-  findOrCreateUser,
-  findOrCreateUea,
-  findOrCreateUsuarioUea,
-  addNotaCornell,
-  getUserById,
-} = require("./database/db");
+
 require("dotenv").config();
 
 const app = express();
@@ -92,6 +86,10 @@ app.get("/subir", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "/client/public", "profesor.html"));
 });
 
+// ────────────────────────────────
+// 🟦 Login: Autenticación de usuario
+// ────────────────────────────────
+
 //Ruta login
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "/client/public", "login.html"));
@@ -115,17 +113,16 @@ app.get("/logout", (req, res, next) => {
   req.logout((err) => (err ? next(err) : res.redirect("/login")));
 });
 
+// ────────────────────────────────
+// 🟨 API: Rutas y controladores
+// ────────────────────────────────
+
 app.get("/api/user", (req, res) => {
   if (!req.user) return res.status(401).json({ error: "No autenticado" });
   res.json({ displayName: req.user.displayName, id: req.user.id });
 });
 
-function ensureAuth(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  res.status(401).json({ error: "No autenticado" });
-}
-
-app.post("/api/nota-cornell", ensureAuth, async (req, res) => {
+app.post("/api/nota-cornell", async (req, res) => {
   try {
     const { uea, ideas_clave, notas_principales, resumen } = req.body;
     const ueaRow = await findOrCreateUea(uea || "UEA");
@@ -138,14 +135,11 @@ app.post("/api/nota-cornell", ensureAuth, async (req, res) => {
   }
 });
 
-app.post("/api/exportar-pdf", ensureAuth, (req, res) => {
+app.post("/api/exportar-pdf", (req, res) => {
   const { keywords, notas, resumen } = req.body;
   const doc = new PDFDocument();
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader(
-    "Content-Disposition",
-    "attachment; filename=nota_cornell.pdf"
-  );
+  res.setHeader("Content-Disposition", "attachment; filename=nota_cornell.pdf");
   doc.pipe(res);
   doc.fontSize(20).text("Nota Cornell", { align: "center" });
   doc.moveDown();
