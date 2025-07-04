@@ -2,9 +2,10 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const path = require("path");
 const PDFDocument = require("pdfkit");
-
+const mysql = require("mysql2/promise");
+const fs = require("fs");
+const path = require("path");
 require("dotenv").config();
 
 const app = express();
@@ -164,10 +165,6 @@ app.get("/components/header.html", (req, res) => {
 app.get("/components/footer.html", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "/client/components", "footer.html"));
 });
-
-const mysql = require("mysql2/promise");
-const fs = require("fs");
-const path = require("path");
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || "127.0.0.1",

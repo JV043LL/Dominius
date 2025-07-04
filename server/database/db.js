@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || "localhost",
+  host: process.env.DB_HOST || "127.0.0.1",
   port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 8080,
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASS || "",
