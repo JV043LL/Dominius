@@ -27,7 +27,7 @@ fi
 
 echo "📦 Instalando dependencias..."
 cd server || exit 1
-npm install
+npm install express express-session passport passport-google-oauth20 dotenv pdfkit mysql2
 
 echo "🚀 Reiniciando servidor con PM2..."
 pm2 restart dominius
