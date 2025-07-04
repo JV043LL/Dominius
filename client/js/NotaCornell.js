@@ -17,23 +17,33 @@ tinymce.init({
   menubar: false,
 });
 
-function guardarTodo() {
-  // Se crea el objeto JSON con todas las secciones
-  const quillTodo = {
-    keywords: quillKeywords.getContents(),
-    notas: quillNotas.getContents(),
-    resumen: quillResumen.getContents(),
+async function guardarNota() {
+  const keywords = tinymce.get("editor-keywords").getContent();
+  const notas = tinymce.get("editor-notas").getContent();
+  const resumen = tinymce.get("editor-resumen").getContent();
+  const uea = document.querySelector(".uea").textContent.trim();
+
+  const contenido = {
+    uea,
+    ideas_clave: keywords,
+    notas_principales: notas,
+    resumen,
   };
 
-  // Solo para mostrar el resultado
-  document.getElementById("resultado").textContent = JSON.stringify(
-    quillTodo,
-    null,
-    2
-  );
+  try {
+    const response = await fetch("/api/nota-cornell", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(contenido),
+    });
 
-  // Prueba de guardadok
-  // console.log(quillTodo);
+    if (!response.ok) throw new Error("Error al guardar la nota");
+    alert("Nota guardada correctamente");
+  } catch (err) {
+    alert("Ocurrió un error al guardar: " + err.message);
+  }
 }
 
 async function exportarPDF() {

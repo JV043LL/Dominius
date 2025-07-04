@@ -3,10 +3,20 @@ const session = require("express-session");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const path = require("path");
+const PDFDocument = require("pdfkit");
+const {
+  findOrCreateUser,
+  findOrCreateUea,
+  findOrCreateUsuarioUea,
+  addNotaCornell,
+  getUserById,
+} = require("./database/db");
 require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
 
 // Sessions y Passport
 app.use(
@@ -28,11 +38,26 @@ passport.use(
         process.env.GOOGLE_CALLBACK_URL ||
         `http://localhost:${PORT}/auth/google/callback`,
     },
-    (accessToken, refreshToken, profile, cb) => cb(null, profile)
+    async (accessToken, refreshToken, profile, cb) => {
+      try {
+        const correo = profile.emails && profile.emails[0].value;
+        const user = await findOrCreateUser(profile.displayName, correo);
+        cb(null, user);
+      } catch (err) {
+        cb(err);
+      }
+    }
   )
 );
-passport.serializeUser((user, cb) => cb(null, user));
-passport.deserializeUser((obj, cb) => cb(null, obj));
+passport.serializeUser((user, cb) => cb(null, user.id));
+passport.deserializeUser(async (id, cb) => {
+  try {
+    const user = await getUserById(id);
+    cb(null, user);
+  } catch (err) {
+    cb(err);
+  }
+});
 
 // Para el desarrollo utilizar nodemon
 
@@ -93,6 +118,46 @@ app.get("/logout", (req, res, next) => {
 app.get("/api/user", (req, res) => {
   if (!req.user) return res.status(401).json({ error: "No autenticado" });
   res.json({ displayName: req.user.displayName, id: req.user.id });
+});
+
+function ensureAuth(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  res.status(401).json({ error: "No autenticado" });
+}
+
+app.post("/api/nota-cornell", ensureAuth, async (req, res) => {
+  try {
+    const { uea, ideas_clave, notas_principales, resumen } = req.body;
+    const ueaRow = await findOrCreateUea(uea || "UEA");
+    const rel = await findOrCreateUsuarioUea(req.user.id, ueaRow.id);
+    await addNotaCornell(rel.id, ideas_clave, notas_principales, resumen);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al guardar" });
+  }
+});
+
+app.post("/api/exportar-pdf", ensureAuth, (req, res) => {
+  const { keywords, notas, resumen } = req.body;
+  const doc = new PDFDocument();
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader(
+    "Content-Disposition",
+    "attachment; filename=nota_cornell.pdf"
+  );
+  doc.pipe(res);
+  doc.fontSize(20).text("Nota Cornell", { align: "center" });
+  doc.moveDown();
+  doc.fontSize(16).text("Keywords", { underline: true });
+  doc.fontSize(12).text(keywords || "");
+  doc.moveDown();
+  doc.fontSize(16).text("Notas", { underline: true });
+  doc.fontSize(12).text(notas || "");
+  doc.moveDown();
+  doc.fontSize(16).text("Resumen", { underline: true });
+  doc.fontSize(12).text(resumen || "");
+  doc.end();
 });
 
 app.get("/metricas", (req, res) => res.render("metricas"));
