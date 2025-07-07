@@ -3,15 +3,24 @@ const session = require("express-session");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const PDFDocument = require("pdfkit");
-const mysql = require("mysql2/promise");
-const fs = require("fs");
 const path = require("path");
+const fs = require("fs");
 require("dotenv").config();
+const db = require("./database/db");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+const {
+  pool,
+  findOrCreateUser,
+  findOrCreateUea,
+  findOrCreateUsuarioUea,
+  addNotaCornell,
+  getUserById,
+} = require("./database/db");
 
 // Sessions y Passport
 app.use(
@@ -83,7 +92,7 @@ app.get("/NotasCornell", (req, res) => {
 });
 
 // Ruta subir material de UEA
-app.get("/subir", (req, res) => {
+app.get("/material-curso", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "/client/public", "profesor.html"));
 });
 
@@ -166,17 +175,6 @@ app.get("/components/footer.html", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "/client/components", "footer.html"));
 });
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || "127.0.0.1",
-  port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 8080,
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASS || "",
-  database: process.env.DB_NAME || "dominius",
-  waitForConnections: true,
-  connectionLimit: 10,
-  multipleStatements: true,
-});
-
 pool
   .query("SELECT 1")
   .then(() => console.log("✅ Conexión exitosa a MySQL en el puerto 8080"))
@@ -185,3 +183,16 @@ pool
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
+//Prueba de base de datos:
+
+async function obtenerUsuarios() {
+  try {
+    const [rows] = await db.query("SELECT * FROM uea");
+    console.log(rows);
+  } catch (error) {
+    console.error("Error al obtener usuarios:", error);
+  }
+}
+
+obtenerUsuarios();

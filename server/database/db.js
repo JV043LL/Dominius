@@ -1,6 +1,7 @@
+require("dotenv").config();
 const mysql = require("mysql2/promise");
 const fs = require("fs");
-const path = require("path");
+const formato = require("./formato");
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || "127.0.0.1",
@@ -13,27 +14,24 @@ const pool = mysql.createPool({
   multipleStatements: true,
 });
 
-/*
-async function init() {
-  const sqlPath = path.join(__dirname, "dominius_estructura.sql");
-  if (fs.existsSync(sqlPath)) {
-    const schema = fs.readFileSync(sqlPath, "utf8");
-    await pool.query(schema);
-  }
-}
-
-init().catch((err) => console.error("DB init error", err));
-*/
 async function findOrCreateUser(nombre, correo) {
   const [rows] = await pool.query("SELECT * FROM usuario WHERE correo = ?", [
     correo,
   ]);
-  if (rows.length) return rows[0];
+
+  if (rows.length) return formato(rows[0]); // Usuario ya existe
+
   const [result] = await pool.query(
-    "INSERT INTO usuario(nombre, correo) VALUES (?, ?)",
+    "INSERT INTO usuario (nombre, correo) VALUES (?, ?)",
     [nombre, correo]
   );
-  return { id: result.insertId, nombre, correo };
+
+  // Volver a consultar para obtener todos los campos, incluido fecha_registro
+  const [newUserRows] = await pool.query("SELECT * FROM usuario WHERE id = ?", [
+    result.insertId,
+  ]);
+
+  return formato(newUserRows[0]);
 }
 
 async function getUserById(id) {
